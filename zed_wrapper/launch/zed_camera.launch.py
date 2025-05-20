@@ -40,11 +40,13 @@ from launch_ros.descriptions import ComposableNode
 os.environ["RCUTILS_COLORIZED_OUTPUT"] = "1"
 
 # ZED Configurations to be loaded by ZED Node
-default_config_common = os.path.join(
-    get_package_share_directory('zed_wrapper'),
-    'config',
-    'common'
-)
+# default_config_common = os.path.join(
+#     get_package_share_directory('zed_wrapper'),
+#     'config',
+#     'common'
+# )
+
+default_config_common = "/wheelie/config/common"
     
 # FFMPEG Configuration to be loaded by ZED Node
 default_config_ffmpeg = os.path.join(
@@ -148,10 +150,16 @@ def launch_setup(context, *args, **kwargs):
     return_array.append(LogInfo(msg=TextSubstitution(text=info)))
 
     # Camera configuration file
+    # config_camera_path = os.path.join(
+    #     get_package_share_directory('zed_wrapper'),
+    #     'config',
+    #     camera_model_val + '.yaml'
+    # )
+
     config_camera_path = os.path.join(
-        get_package_share_directory('zed_wrapper'),
-        'config',
-        camera_model_val + '.yaml'
+        "/wheelie",
+        "config",
+        camera_model_val + ".yaml"
     )
 
     info = 'Using camera configuration file: ' + config_camera_path
@@ -229,6 +237,7 @@ def launch_setup(context, *args, **kwargs):
                 executable=container_exec,
                 arguments=['--use_multi_threaded_executor','--ros-args', '--log-level', 'info'],
                 output='screen',
+                composable_node_descriptions=[] # fix to None type error
         )
         return_array.append(zed_container)
 
